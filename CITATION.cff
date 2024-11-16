@@ -1,0 +1,19 @@
+# YAML 1.2
+---
+cff-version: "1.2.0"
+title: "tlshunter"
+authors:
+  - family-names: Ciarella
+    given-names: Simone
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+date-released: 2024-11-16
+version: "0.1.0"
+repository-code: "https://github.com/SCiarella/tlshunter"
+keywords:
+  - "molecular-dynamics"
+  - " python"
+  - " machine-learning"
+  - " two-level-system"
+  - " transitions"
+  - " dynamics"
+message: "If you use this software, please cite it using these metadata."

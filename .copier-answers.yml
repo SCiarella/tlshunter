@@ -1,0 +1,40 @@
+# Changes here will be overwritten by Copier
+SelectCitation:
+- AddCitationFile_flag
+- AddCFFConvert_flag
+SelectCodeQualityFeatures:
+- AddLocalTests_flag
+- SelectGitHubActions_flag
+- AddLinting_flag
+- AddPreCommit_flag
+- AddSonarCloud_flag
+- AddEditorConfig_flag
+SelectCommunityFeatures:
+- AddCodeConduct_flag
+- AddContributing_flag
+SelectDocumentationFeatures:
+- AddLocalDocumentation_flag
+- AddOnlineDocumentation_flag
+- AddDevDoc_flag
+- AddGitHubActionDocumentation_flag
+SelectGitHubActions:
+- AddGitHubActionBuild_flag
+SelectPublishReleaseFeatures:
+- SelectCitation_flag
+- AddChangeLog_flag
+- AddZenodo_flag
+_commit: 0.6.1
+_src_path: https://github.com/nlesc/python-template.git
+code_of_conduct_email: simoneciarella@gmail.com
+copyright_holder: Simone Ciarella
+email: simoneciarella@gmail.com
+full_name: Simone Ciarella
+github_organization: SCiarella
+keywords: molecular-dynamics, python, machine-learning, two-level-system, transitions,
+    dynamics
+license: Apachev2
+package_name: tlshunter
+package_short_description: Active learning framework to identify transitions in computer
+    simulations
+template_profile: recommended
+version: 0.1.0
