@@ -22,7 +22,12 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-dependencies = []
+dependencies = [
+    'numpy',
+    'pandas',
+    'uv',
+    'PyYAML'
+]
 description = "Active learning framework to identify transitions in computer simulations"
 keywords = ["molecular-dynamics"," python"," machine-learning"," two-level-system"," transitions"," dynamics"]
 license = {file = "LICENSE"}
@@ -38,6 +43,7 @@ dev = [
     "coverage [toml]",
     "pytest",
     "pytest-cov",
+    "types-PyYAML",
     "ruff",
     "sphinx",
     "sphinx_rtd_theme",
@@ -84,8 +90,13 @@ extras = dev
 
 [tool.ruff]
 line-length = 120
-output-format = "concise"
 extend-exclude = ["docs"]
+select = [
+	"F",  # Pyflakes
+	"E",  # pycodestyle (error)
+	"W",  # pycodestyle (warning)
+    "I",  # isort
+]
 
 [tool.ruff.lint]
 # Allow unused variables when underscore-prefixed.

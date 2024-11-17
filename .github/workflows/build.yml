@@ -32,6 +32,8 @@ jobs:
       - name: Upgrade pip and install dependencies
         run: |
           python -m pip install --upgrade pip setuptools
+          python -m pip install uv
+          python -m uv pip install autogluon
           python -m pip install .[dev,publishing]
       - name: Run unit tests
         run: python -m pytest -v
@@ -56,6 +58,8 @@ jobs:
       - name: Upgrade pip and install dependencies
         run: |
           python -m pip install --upgrade pip setuptools
+          python -m pip install uv
+          python -m uv pip install autogluon
           python -m pip install .[dev,publishing]
       - name: Check style against standards using ruff
         run: |

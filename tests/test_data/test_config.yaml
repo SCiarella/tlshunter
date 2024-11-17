@@ -1,0 +1,12 @@
+In_file: 'tests/test_data/QS_T0062.feather'
+pretraining_classifier: 'pretraining-classifier-T0062.feather'
+pretraining_predictor:  'pretraining-predictor-T0062.feather'
+calculations_classifier: 'tests/test_data/test_output/nonDW_T0062.csv'
+calculations_predictor:  'tests/test_data/test_output/quantum_splitting_T0062.csv'
+class_train_hours: 0.01
+pred_train_hours: 0.01
+Fast_class: False
+Fast_pred: False
+ij_decimals: 0
+validation_split: 0.2
+class_name: 'is_dw'

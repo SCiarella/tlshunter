@@ -1,3 +1,10 @@
+tests/test_data/MLmodels*
+!tests/test_data/MLmodels/pretrain*
+
+# //TODO: solve their existence
+TLS*
+tests/test_data/QS_T0062.feather
+
 # Byte-compiled / optimized / DLL files
 *.py[cod]
 *$py.class
@@ -67,3 +74,7 @@ venv.bak/
 *.swp
 *.swo
 *.orig
+
+# vscode
+.vscode/
+*/.vscode/
