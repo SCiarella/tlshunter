@@ -19,7 +19,11 @@ def main() -> None:
         rounding_error = 10 ** (-1 * (ndecimals + 1)) if ndecimals > 0 else 0
 
         badpairs_df, goodpairs_df = th.construct_pairs(
-            class_0_pairs, class_1_pairs, all_pairs_df, rounding_error, ndecimals
+            class_0_pairs,
+            class_1_pairs,
+            all_pairs_df,
+            rounding_error,
+            ndecimals,
         )
     else:
         print(
@@ -29,7 +33,11 @@ def main() -> None:
         badpairs_df = pd.DataFrame()
 
     new_training_df, training_set, validation_set = th.prepare_training_data(
-        conf, used_data, pretrain_df, badpairs_df, goodpairs_df
+        conf,
+        used_data,
+        pretrain_df,
+        badpairs_df,
+        goodpairs_df,
     )
     th.train_model(training_set, validation_set, conf)
 
@@ -38,13 +46,16 @@ def main() -> None:
     In_folder = os.path.dirname(In_file)
     model_path = f"{In_folder}/MLmodels"
     new_training_df.reset_index(drop=True).to_feather(
-        f"{model_path}/data-used-by-classifier-{In_label}.feather", compression="zstd"
+        f"{model_path}/data-used-by-classifier-{In_label}.feather",
+        compression="zstd",
     )
     training_set.reset_index(drop=True).to_feather(
-        f"{model_path}/classifier-training-set-{In_label}.feather", compression="zstd"
+        f"{model_path}/classifier-training-set-{In_label}.feather",
+        compression="zstd",
     )
     validation_set.reset_index(drop=True).to_feather(
-        f"{model_path}/classifier-validation-set-{In_label}.feather", compression="zstd"
+        f"{model_path}/classifier-validation-set-{In_label}.feather",
+        compression="zstd",
     )
 
 

@@ -8,7 +8,10 @@ from .utils import create_directory
 
 
 def process_chunk(
-    chunk: pd.DataFrame, all_pairs_df: pd.DataFrame, rounding_error: float, ndecimals: int
+    chunk: pd.DataFrame,
+    all_pairs_df: pd.DataFrame,
+    rounding_error: float,
+    ndecimals: int,
 ) -> pd.DataFrame:
     """Process a chunk of data to find corresponding input pairs.
 
@@ -243,10 +246,14 @@ def prepare_training_data(
     badpairs_df = badpairs_df.sample(frac=1, random_state=20, ignore_index=True)
 
     training_set = pd.concat([goodpairs_df.iloc[:Ntrain], badpairs_df.iloc[:Ntrain]]).sample(
-        frac=1, random_state=20, ignore_index=True
+        frac=1,
+        random_state=20,
+        ignore_index=True,
     )
     validation_set = pd.concat([goodpairs_df.iloc[Ntrain:N], badpairs_df.iloc[Ntrain:N]]).sample(
-        frac=1, random_state=20, ignore_index=True
+        frac=1,
+        random_state=20,
+        ignore_index=True,
     )
 
     print(

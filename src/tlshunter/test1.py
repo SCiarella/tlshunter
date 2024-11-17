@@ -44,7 +44,14 @@ if __name__ == "__main__":
     # draw a reference line
     axs.plot([min(x), max(x)], [min(x), max(x)], "b--", alpha=1, lw=1)
     hb = axs.hexbin(
-        x, y, cmap="summer", mincnt=1, gridsize=75, xscale="log", yscale="log", norm=matplotlib.colors.LogNorm()
+        x,
+        y,
+        cmap="summer",
+        mincnt=1,
+        gridsize=75,
+        xscale="log",
+        yscale="log",
+        norm=matplotlib.colors.LogNorm(),
     )
     axs.set_ylabel("Target feature (AI)", size=15)
     axs.set_xlabel("Target feature (True)", size=15)

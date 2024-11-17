@@ -76,7 +76,7 @@ if __name__ == "__main__":
             [
                 filtered_df,
                 chunk[chunk[class_name] > 0],
-            ]
+            ],
         )
         print(
             f"done in {time.time() - start} sec (collected up to {len(filtered_df)} class-1) ",

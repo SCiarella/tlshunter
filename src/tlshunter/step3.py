@@ -195,11 +195,14 @@ if __name__ == "__main__":
 
     # store
     new_training_df.reset_index().drop(columns="index").to_feather(
-        f"MLmodel/data-used-by-predictor-{In_label}.feather", compression="zstd"
+        f"MLmodel/data-used-by-predictor-{In_label}.feather",
+        compression="zstd",
     )
     training_set.reset_index().drop(columns="index").to_feather(
-        f"MLmodel/predictor-training-set-{In_label}.feather", compression="zstd"
+        f"MLmodel/predictor-training-set-{In_label}.feather",
+        compression="zstd",
     )
     validation_set.reset_index().drop(columns="index").to_feather(
-        f"MLmodel/predictor-validation-set-{In_label}.feather", compression="zstd"
+        f"MLmodel/predictor-validation-set-{In_label}.feather",
+        compression="zstd",
     )
