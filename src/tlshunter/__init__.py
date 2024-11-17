@@ -10,7 +10,9 @@ __version__ = "0.1.0"
 
 from .io import load_config
 from .io import load_data
-from .mlops import train_model
+from .io import save_datasets
+from .mlops import classifier_filter
+from .mlops import train_classifier
 from .preprocess import construct_pairs
 from .preprocess import prepare_data
 from .preprocess import prepare_training_data
@@ -23,5 +25,7 @@ __all__ = [
     "prepare_data",
     "prepare_training_data",
     "construct_pairs",
-    "train_model",
+    "train_classifier",
+    "classifier_filter",
+    "save_datasets",
 ]
