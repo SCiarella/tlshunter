@@ -15,30 +15,26 @@ if __name__ == "__main__":
     print(f"\n*** Requested to train the predictor from {class_1_file}")
     ndecimals = myparams.ij_decimals
     if ndecimals > 0:
-        rounding_error = 10**(-1 * (ndecimals + 1))
+        rounding_error = 10 ** (-1 * (ndecimals + 1))
     model_path = f"MLmodel/prediction-{In_label}"
 
     # *************
     # First I load the data that the predictor has already used for its training
     try:
-        used_data = pd.read_feather(
-            f"MLmodel/data-used-by-predictor-{In_label}.feather")
+        used_data = pd.read_feather(f"MLmodel/data-used-by-predictor-{In_label}.feather")
     except:
         print("First time training the predictor")
         used_data = pd.DataFrame()
 
     # Then I check the calculations to see the what new data are available
     calculation_dir = f"./exact_calculations/{In_label}"
-    if not os.path.isfile(
-            f"{calculation_dir}/{myparams.calculations_predictor}"):
+    if not os.path.isfile(f"{calculation_dir}/{myparams.calculations_predictor}"):
         print("\n*(!)* Notice that there are no prediction data\n")
         use_new_calculations = False
         calculated_pairs = pd.DataFrame()
     else:
         use_new_calculations = True
-        calculated_pairs = pd.read_csv(
-            f"{calculation_dir}/{myparams.calculations_predictor}",
-            index_col=0)
+        calculated_pairs = pd.read_csv(f"{calculation_dir}/{myparams.calculations_predictor}", index_col=0)
         print(
             f"From the calculation results we have {len(calculated_pairs)} pairs for which we evaluated the target feature",
         )
@@ -51,8 +47,7 @@ if __name__ == "__main__":
 
     # I also have to include the pre-training data, which I load now to see if overall we gained data
     try:
-        pretrain_df = pd.read_feather(
-            f"MLmodel/{myparams.pretraining_predictor}")
+        pretrain_df = pd.read_feather(f"MLmodel/{myparams.pretraining_predictor}")
     except:
         print("\nNotice that no pretraining is available")
         pretrain_df = pd.DataFrame()
@@ -64,8 +59,7 @@ if __name__ == "__main__":
             f"\n*****\nThe model was trained using {len(used_data)} data and now we could use:\n\t{len(pretrain_df)} from pretraining \n\t{len(calculated_pairs)} from calculations",
         )
     else:
-        print(
-            "All the data available have been already used to train the model")
+        print("All the data available have been already used to train the model")
         sys.exit()
 
     # If we are not exited, it means that we have more data, thus it makes sense to retrain the model
@@ -73,7 +67,7 @@ if __name__ == "__main__":
         # split this task between parallel workers
         elements_per_worker = 100
         chunks = [
-            calculated_pairs.iloc[i:i + elements_per_worker]
+            calculated_pairs.iloc[i : i + elements_per_worker]
             for i in range(0, len(calculated_pairs), elements_per_worker)
         ]
         n_chunks = len(chunks)
@@ -90,14 +84,11 @@ if __name__ == "__main__":
                 if ndecimals > 0:
                     a = pairs_df[
                         (pairs_df["conf"] == conf)
-                        & (pairs_df["i"].between(i - rounding_error, i +
-                                                 rounding_error))
-                        & (pairs_df["j"].between(j - rounding_error,
-                                                 j + rounding_error))].copy()
+                        & (pairs_df["i"].between(i - rounding_error, i + rounding_error))
+                        & (pairs_df["j"].between(j - rounding_error, j + rounding_error))
+                    ].copy()
                 else:
-                    a = pairs_df[(pairs_df["conf"] == conf)
-                                 & (pairs_df["i"] == i) &
-                                 (pairs_df["j"] == j)].copy()
+                    a = pairs_df[(pairs_df["conf"] == conf) & (pairs_df["i"] == i) & (pairs_df["j"] == j)].copy()
                 if len(a) > 1:
                     print("Error! multiple correspondences in dw")
                     sys.exit()
@@ -123,8 +114,7 @@ if __name__ == "__main__":
             f"\n\nFrom the calculations I constructed a database of {len(out_df)} pairs for which I have the input informations.",
         )
     else:
-        print(
-            "(We are not using data from calculations, but only pretraining)")
+        print("(We are not using data from calculations, but only pretraining)")
         out_df = pd.DataFrame()
 
     # *******
@@ -145,23 +135,19 @@ if __name__ == "__main__":
             print("and since the model is already trained, I stop")
             sys.exit()
         else:
-            print(f"but the model is not in {model_path}, so I train anyway",
-                  flush=True)
+            print(f"but the model is not in {model_path}, so I train anyway", flush=True)
 
     # ************
     # Optional step to normalize small numbers
     # *** I do (-1) log of the data such that the values are closer and their weight is more balanced in the fitness
-    new_training_df["10tominus_tg"] = new_training_df["target_feature"].apply(
-        lambda x: -np.log10(x))
+    new_training_df["10tominus_tg"] = new_training_df["target_feature"].apply(lambda x: -np.log10(x))
 
     # Split a part of this pairs for validation
     N = len(new_training_df)
     Nval = int(myparams.validation_split * N)
     Ntrain = N - Nval
     # shuffle
-    new_training_df = new_training_df.sample(frac=1,
-                                             random_state=20,
-                                             ignore_index=True)
+    new_training_df = new_training_df.sample(frac=1, random_state=20, ignore_index=True)
     # (!) To be compatible with feather format, I will replace the 'NotAvail' entries with 0
     new_training_df = new_training_df.replace("NotAvail", 0)
     # and slice
@@ -189,7 +175,7 @@ if __name__ == "__main__":
     time_limit = training_hours * 60 * 60
 
     # and define a weight=1/qs in order to increase the precision for the small qs
-    training_set["weights"] = (training_set["target_feature"])**(-1)
+    training_set["weights"] = (training_set["target_feature"]) ** (-1)
 
     # train
     # * I am excluding KNN because it is problematic
@@ -201,8 +187,7 @@ if __name__ == "__main__":
         sample_weight="weights",
         weight_evaluation=True,
     ).fit(
-        TabularDataset(
-            training_set.drop(columns=["i", "j", "conf", "target_feature"])),
+        TabularDataset(training_set.drop(columns=["i", "j", "conf", "target_feature"])),
         time_limit=time_limit,
         presets=presets,
         excluded_model_types=["KNN"],
@@ -210,11 +195,11 @@ if __name__ == "__main__":
 
     # store
     new_training_df.reset_index().drop(columns="index").to_feather(
-        f"MLmodel/data-used-by-predictor-{In_label}.feather",
-        compression="zstd")
+        f"MLmodel/data-used-by-predictor-{In_label}.feather", compression="zstd"
+    )
     training_set.reset_index().drop(columns="index").to_feather(
-        f"MLmodel/predictor-training-set-{In_label}.feather",
-        compression="zstd")
+        f"MLmodel/predictor-training-set-{In_label}.feather", compression="zstd"
+    )
     validation_set.reset_index().drop(columns="index").to_feather(
-        f"MLmodel/predictor-validation-set-{In_label}.feather",
-        compression="zstd")
+        f"MLmodel/predictor-validation-set-{In_label}.feather", compression="zstd"
+    )

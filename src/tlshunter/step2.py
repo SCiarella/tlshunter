@@ -61,8 +61,7 @@ if __name__ == "__main__":
     chunk_size = 1e6
     nchunks = int(npairs / chunk_size) + 1
     processed_chunks = []
-    print(
-        f"Temporarily splitting the data ({npairs} pairs) in {nchunks} parts")
+    print(f"Temporarily splitting the data ({npairs} pairs) in {nchunks} parts")
     df_chunks = np.array_split(new_df, nchunks)
     del new_df
     print("Classification starting:", flush=True)
@@ -71,13 +70,14 @@ if __name__ == "__main__":
     filtered_df = pd.DataFrame()
     for chunk_id, chunk in enumerate(df_chunks):
         print(f"\n* Classifying part {chunk_id + 1}/{nchunks}", flush=True)
-        df_chunks[chunk_id][class_name] = classifier.predict(
-            chunk.drop(columns=["conf", "i", "j"]))
+        df_chunks[chunk_id][class_name] = classifier.predict(chunk.drop(columns=["conf", "i", "j"]))
         # I only keep the predicted class-1
-        filtered_df = pd.concat([
-            filtered_df,
-            chunk[chunk[class_name] > 0],
-        ])
+        filtered_df = pd.concat(
+            [
+                filtered_df,
+                chunk[chunk[class_name] > 0],
+            ]
+        )
         print(
             f"done in {time.time() - start} sec (collected up to {len(filtered_df)} class-1) ",
         )
@@ -88,5 +88,4 @@ if __name__ == "__main__":
     )
 
     filtered_df_name = f"output_ML/{In_label}/classified_{In_label}.feather"
-    filtered_df.reset_index(drop=True).to_feather(filtered_df_name,
-                                                  compression="zstd")
+    filtered_df.reset_index(drop=True).to_feather(filtered_df_name, compression="zstd")

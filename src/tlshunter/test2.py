@@ -16,7 +16,6 @@ warnings.filterwarnings("ignore")
 
 
 class AutogluonWrapper_p:
-
     def __init__(self, predictor, feature_names):
         self.ag_model = predictor
         self.feature_names = feature_names
@@ -31,7 +30,6 @@ class AutogluonWrapper_p:
 
 
 class AutogluonWrapper_c:
-
     def __init__(self, predictor, feature_names):
         self.ag_model = predictor
         self.feature_names = feature_names
@@ -53,10 +51,8 @@ try:
 except OSError:
     pass
 
-data_predictor = pd.read_feather(
-    f"./MLmodel/predictor-training-set-{In_label}.feather")
-data_classifier = pd.read_feather(
-    f"./MLmodel/classifier-training-set-{In_label}.feather")
+data_predictor = pd.read_feather(f"./MLmodel/predictor-training-set-{In_label}.feather")
+data_classifier = pd.read_feather(f"./MLmodel/classifier-training-set-{In_label}.feather")
 
 # shuffle the dataset
 data_predictor = data_predictor.sample(frac=1)
@@ -64,15 +60,11 @@ data_classifier = data_classifier.sample(frac=1)
 
 # store some particular configs to later explain better
 N_configs_to_explain_indetail = 4
-specific_samples_classifier = data_classifier.iloc[:
-                                                   N_configs_to_explain_indetail]
-specific_samples_predictor = data_predictor.iloc[:
-                                                 N_configs_to_explain_indetail]
-X_specific_samples_p = specific_samples_predictor.drop(
-    columns=["i", "j", "conf", "target_feature"])
+specific_samples_classifier = data_classifier.iloc[:N_configs_to_explain_indetail]
+specific_samples_predictor = data_predictor.iloc[:N_configs_to_explain_indetail]
+X_specific_samples_p = specific_samples_predictor.drop(columns=["i", "j", "conf", "target_feature"])
 Y_specific_samples_p = specific_samples_predictor["target_feature"]
-X_specific_samples_c = specific_samples_classifier.drop(
-    columns=["i", "j", "conf", class_name])
+X_specific_samples_c = specific_samples_classifier.drop(columns=["i", "j", "conf", class_name])
 Y_specific_samples_c = specific_samples_classifier[class_name]
 
 # Separate input from output
@@ -102,8 +94,8 @@ X_p_for_bl = X_p.iloc[0:N_baseline, :]
 X_c_for_bl = X_c.iloc[0:N_baseline, :]
 # and then how many for the plots
 N_SHAP = 5
-X_p_for_shap = X_p.iloc[N_baseline:(N_baseline + N_SHAP), :]
-X_c_for_shap = X_c.iloc[N_baseline:(N_baseline + N_SHAP), :]
+X_p_for_shap = X_p.iloc[N_baseline : (N_baseline + N_SHAP), :]
+X_c_for_shap = X_c.iloc[N_baseline : (N_baseline + N_SHAP), :]
 
 # ***** I calculate the SHAP parameters for the predictor
 print(
@@ -133,19 +125,13 @@ for i, shap_i in enumerate(shap_values_specific_samples_p):
     fig, myax = plt.subplots()
     shap.plots.waterfall(shap_i, max_display=7, show=False)
     plt.tight_layout()
-    plt.savefig("%s/predictor-waterfall_targetfeat%g.png" %
-                (shapdir, Y_specific_samples_p.iloc[i]),
-                dpi=150)
+    plt.savefig("%s/predictor-waterfall_targetfeat%g.png" % (shapdir, Y_specific_samples_p.iloc[i]), dpi=150)
     plt.close()
 
 # *** Beeswarm plot
 # it is a summary of the shap values for the most important features
 fig, myax = plt.subplots()
-shap.plots.beeswarm(shap_values_p,
-                    max_display=7,
-                    color=pl.get_cmap("RdYlGn_r"),
-                    log_scale=False,
-                    show=False)
+shap.plots.beeswarm(shap_values_p, max_display=7, color=pl.get_cmap("RdYlGn_r"), log_scale=False, show=False)
 plt.tight_layout()
 plt.savefig("%s/predictor-beeswarm.png" % (shapdir), dpi=150)
 plt.close()
@@ -171,8 +157,7 @@ for feature in list_of_features_p:
     myax.set_xscale("log")
     myax.set_ylabel("E[target | %s]" % feature)
     plt.tight_layout()
-    plt.savefig("%s/predictor-partial_dependence_%s.png" % (shapdir, feature),
-                dpi=150)
+    plt.savefig("%s/predictor-partial_dependence_%s.png" % (shapdir, feature), dpi=150)
     plt.close()
 
 # ***** I calculate the SHAP parameters for the classifier
@@ -209,11 +194,7 @@ for i, shap_i in enumerate(shap_values_specific_samples_c):
 # *** Beeswarm plot
 # it is a summary of the shap values for the most important features
 fig, myax = plt.subplots()
-shap.plots.beeswarm(shap_values_c,
-                    max_display=7,
-                    color=pl.get_cmap("RdYlGn_r"),
-                    log_scale=False,
-                    show=False)
+shap.plots.beeswarm(shap_values_c, max_display=7, color=pl.get_cmap("RdYlGn_r"), log_scale=False, show=False)
 plt.tight_layout()
 plt.savefig("%s/classifier-beeswarm.png" % (shapdir), dpi=150)
 plt.close()
@@ -239,6 +220,5 @@ for feature in list_of_features_c:
     myax.set_xscale("log")
     myax.set_ylabel("E[class | %s]" % feature)
     plt.tight_layout()
-    plt.savefig("%s/classifier-partial_dependence_%s.png" % (shapdir, feature),
-                dpi=150)
+    plt.savefig("%s/classifier-partial_dependence_%s.png" % (shapdir, feature), dpi=150)
     plt.close()

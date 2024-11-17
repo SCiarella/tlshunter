@@ -25,8 +25,7 @@ predictor.persist_models()
 
 # Read the data
 outdir = f"output_ML/{In_label}"
-pairs_df = pd.read_feather(
-    f"output_ML/{In_label}/classified_{In_label}.feather")
+pairs_df = pd.read_feather(f"output_ML/{In_label}/classified_{In_label}.feather")
 nconfs = len(pairs_df["conf"].drop_duplicates())
 print(
     f"\n*** Found {nconfs} macro-configurations and a total of {len(pairs_df)} pairs\n\nStarting predictions",
@@ -42,12 +41,14 @@ print("The target has been predicted. Now storing results")
 # store the predictions
 pairs_df["target_feature"] = y_pred_by_AI
 pairs_df = pairs_df.sort_values(by="target_feature")
-pairs_df[[
-    "conf",
-    "i",
-    "j",
-    "target_feature",
-]].to_csv(f"{outdir}/predicted_{In_label}_allpairs.csv", index=False)
+pairs_df[
+    [
+        "conf",
+        "i",
+        "j",
+        "target_feature",
+    ]
+].to_csv(f"{outdir}/predicted_{In_label}_allpairs.csv", index=False)
 all_qs_df = pairs_df.copy()
 
 # then I exclude the pairs that are bad (according to the exact calculation)
@@ -55,11 +56,8 @@ calculation_dir = f"./exact_calculations/{In_label}"
 if not os.path.isfile(f"{calculation_dir}/{myparams.calculations_classifier}"):
     print("\n*(!)* Notice that there are no classification data\n")
 else:
-    class_0_pairs = pd.read_csv(
-        f"{calculation_dir}/{myparams.calculations_classifier}", index_col=0)
-    class_1_pairs = pd.read_csv(
-        f"{calculation_dir}/{myparams.calculations_predictor}",
-        index_col=0)[["conf", "i", "j"]]
+    class_0_pairs = pd.read_csv(f"{calculation_dir}/{myparams.calculations_classifier}", index_col=0)
+    class_1_pairs = pd.read_csv(f"{calculation_dir}/{myparams.calculations_predictor}", index_col=0)[["conf", "i", "j"]]
 
     temp_df = all_qs_df.reset_index(drop=True)
     temp_df["index"] = temp_df.index
@@ -74,8 +72,7 @@ else:
 if not os.path.isfile(f"{calculation_dir}/{myparams.calculations_predictor}"):
     print("\n*(!)* Notice that there are no prediction data\n")
 else:
-    calculated_pairs = pd.read_csv(
-        f"{calculation_dir}/{myparams.calculations_predictor}", index_col=0)
+    calculated_pairs = pd.read_csv(f"{calculation_dir}/{myparams.calculations_predictor}", index_col=0)
 
     temp_df = all_qs_df.reset_index(drop=True)
     temp_df["index"] = temp_df.index
@@ -88,9 +85,11 @@ else:
     )
 
 # Storing
-all_qs_df[[
-    "conf",
-    "i",
-    "j",
-    "target_feature",
-]].to_csv(f"{outdir}/predicted_{In_label}_newpairs.csv", index=False)
+all_qs_df[
+    [
+        "conf",
+        "i",
+        "j",
+        "target_feature",
+    ]
+].to_csv(f"{outdir}/predicted_{In_label}_newpairs.csv", index=False)

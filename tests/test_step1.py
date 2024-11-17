@@ -20,7 +20,7 @@ def remove_file(config):
         os.remove(file_path)
 
 
-@pytest.fixture()
+@pytest.fixture
 def prepared_data(config):
     return th.prepare_data(config)
 
@@ -44,12 +44,10 @@ def test_construct_pairs(prepared_data, config):
     if use_new_calculations:
         all_pairs_df = th.load_data(config["In_file"])
         ndecimals = config["ij_decimals"]
-        rounding_error = 10**(-1 * (ndecimals + 1)) if ndecimals > 0 else 0
-        badpairs_df, goodpairs_df = th.construct_pairs(class_0_pairs,
-                                                       class_1_pairs,
-                                                       all_pairs_df,
-                                                       rounding_error,
-                                                       ndecimals)
+        rounding_error = 10 ** (-1 * (ndecimals + 1)) if ndecimals > 0 else 0
+        badpairs_df, goodpairs_df = th.construct_pairs(
+            class_0_pairs, class_1_pairs, all_pairs_df, rounding_error, ndecimals
+        )
         assert isinstance(badpairs_df, pd.DataFrame)
         assert isinstance(goodpairs_df, pd.DataFrame)
 
@@ -59,7 +57,8 @@ def test_prepare_training_data(prepared_data, config):
     badpairs_df = pd.DataFrame()
     goodpairs_df = pd.DataFrame()
     new_training_df, training_set, validation_set = th.prepare_training_data(
-        config, used_data, pretrain_df, badpairs_df, goodpairs_df)
+        config, used_data, pretrain_df, badpairs_df, goodpairs_df
+    )
     assert isinstance(new_training_df, pd.DataFrame)
     assert isinstance(training_set, pd.DataFrame)
     assert isinstance(validation_set, pd.DataFrame)
@@ -70,5 +69,6 @@ def test_train_model(prepared_data, config):
     badpairs_df = pd.DataFrame()
     goodpairs_df = pd.DataFrame()
     new_training_df, training_set, validation_set = th.prepare_training_data(
-        config, used_data, pretrain_df, badpairs_df, goodpairs_df)
+        config, used_data, pretrain_df, badpairs_df, goodpairs_df
+    )
     th.train_model(training_set, validation_set, config)
