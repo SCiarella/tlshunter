@@ -11,7 +11,7 @@ def config():
     return th.load_config("tests/test_data/test_config.yaml")
 
 
-@pytest.fixture()
+@pytest.fixture
 def prepared_data(config):
     return th.prepare_data(config)
 
@@ -41,13 +41,11 @@ def test_apply_classifier(prepared_data, config, classifier_path):
         )
         sys.exit()
     else:
-        classifier = TabularPredictor.load(classifier_save_path,
-                                           require_version_match=False)
+        classifier = TabularPredictor.load(classifier_save_path, require_version_match=False)
 
     filtered_df = th.classifier_filter(new_df, classifier, config)
     filtered_df_name = f"{output_name}/classified_{In_label}.feather"
-    filtered_df.reset_index(drop=True).to_feather(filtered_df_name,
-                                                  compression="zstd")
+    filtered_df.reset_index(drop=True).to_feather(filtered_df_name, compression="zstd")
 
     assert isinstance(filtered_df, pd.DataFrame)
     assert os.path.exists(filtered_df_name)

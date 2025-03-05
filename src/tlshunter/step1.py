@@ -4,8 +4,7 @@ import tlshunter as th
 
 if __name__ == "__main__":
     conf = th.load_config("tests/test_data/test_config.yaml")
-    used_data, class_0_pairs, class_1_pairs, pretrain_df, use_new_calculations = th.prepare_data(
-        conf)
+    used_data, class_0_pairs, class_1_pairs, pretrain_df, use_new_calculations = th.prepare_data(conf)
 
     if use_new_calculations:
         all_pairs_df = th.load_data(conf["In_file"])
@@ -14,7 +13,7 @@ if __name__ == "__main__":
             sys.exit()
 
         ndecimals = conf["ij_decimals"]
-        rounding_error = 10**(-1 * (ndecimals + 1)) if ndecimals > 0 else 0
+        rounding_error = 10 ** (-1 * (ndecimals + 1)) if ndecimals > 0 else 0
 
         badpairs_df, goodpairs_df = th.construct_pairs(
             class_0_pairs,

@@ -72,7 +72,7 @@ def test_construct_pairs(prepared_data, config):
     if use_new_calculations:
         all_pairs_df = th.load_data(config["In_file"])
         ndecimals = config["ij_decimals"]
-        rounding_error = 10**(-1 * (ndecimals + 1)) if ndecimals > 0 else 0
+        rounding_error = 10 ** (-1 * (ndecimals + 1)) if ndecimals > 0 else 0
         badpairs_df, goodpairs_df = th.construct_pairs(
             class_0_pairs,
             class_1_pairs,
