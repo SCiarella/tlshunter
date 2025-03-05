@@ -50,9 +50,12 @@ def load_data(file_path: str, file_type: str = "feather") -> pd.DataFrame:
         return pd.DataFrame()
 
 
-def save_datasets(conf: dict, new_training_df: pd.DataFrame,
-                  training_set: pd.DataFrame,
-                  validation_set: pd.DataFrame) -> None:
+def save_datasets(
+    conf: dict,
+    new_training_df: pd.DataFrame,
+    training_set: pd.DataFrame,
+    validation_set: pd.DataFrame,
+) -> None:
     """Save datasets to feather files with zstd compression.
 
     Parameters

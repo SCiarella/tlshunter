@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
     # *************
     # (1) Load the preprocessed data
-    #new_df = th.load_data(In_file)
+    # new_df = th.load_data(In_file)
     new_df = th.load_data(in_name)
 
     print(f"\n\t@@@@ Overall we have {len(new_df)} pairs")
@@ -45,12 +45,10 @@ if __name__ == "__main__":
         print(f"\nUsing the filter trained in {classifier_save_path}")
 
     print("\n* Classifier loading", flush=True)
-    classifier = TabularPredictor.load(classifier_save_path,
-                                       require_version_match=False)
+    classifier = TabularPredictor.load(classifier_save_path, require_version_match=False)
 
     print(new_df.columns)
     filtered_df = th.classifier_filter(new_df, classifier, conf)
 
     filtered_df_name = f"{output_name}/classified_{In_label}.feather"
-    filtered_df.reset_index(drop=True).to_feather(filtered_df_name,
-                                                  compression="zstd")
+    filtered_df.reset_index(drop=True).to_feather(filtered_df_name, compression="zstd")

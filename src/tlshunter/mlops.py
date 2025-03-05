@@ -6,8 +6,7 @@ from autogluon.tabular import TabularDataset
 from autogluon.tabular import TabularPredictor
 
 
-def train_classifier(training_set: pd.DataFrame, validation_set: pd.DataFrame,
-                     conf: dict) -> None:
+def train_classifier(training_set: pd.DataFrame, validation_set: pd.DataFrame, conf: dict) -> None:
     """Train the model using the training set.
 
     This function trains a classification model using the provided training set and configuration.
@@ -28,22 +27,21 @@ def train_classifier(training_set: pd.DataFrame, validation_set: pd.DataFrame,
     model_path = f"{In_folder}/MLmodels"
     model_name = f"{model_path}/classification-{In_label}"
 
-    presets = ("good_quality_faster_inference_only_refit" if conf["Fast_class"]
-               else "high_quality_fast_inference_only_refit")
+    presets = (
+        "good_quality_faster_inference_only_refit" if conf["Fast_class"] else "high_quality_fast_inference_only_refit"
+    )
     training_hours = conf["class_train_hours"]
     time_limit = training_hours * 60 * 60
 
-    predictor = TabularPredictor(
-        label=conf["class_name"], path=model_name, eval_metric="accuracy").fit(
-            TabularDataset(training_set.drop(columns=["i", "j", "conf"])),
-            time_limit=time_limit,
-            presets=presets,
-            excluded_model_types=["KNN"],
-        )
+    predictor = TabularPredictor(label=conf["class_name"], path=model_name, eval_metric="accuracy").fit(
+        TabularDataset(training_set.drop(columns=["i", "j", "conf"])),
+        time_limit=time_limit,
+        presets=presets,
+        excluded_model_types=["KNN"],
+    )
 
 
-def classifier_filter(new_df: pd.DataFrame, classifier: TabularPredictor,
-                      conf: dict) -> pd.DataFrame:
+def classifier_filter(new_df: pd.DataFrame, classifier: TabularPredictor, conf: dict) -> pd.DataFrame:
     """Filter the DataFrame using the classifier.
 
     This function classifies the rows of the DataFrame and filters out the rows that do not belong to class-1.
@@ -73,10 +71,8 @@ def classifier_filter(new_df: pd.DataFrame, classifier: TabularPredictor,
     filtered_df = pd.DataFrame()
     for chunk_id, chunk in enumerate(df_chunks):
         print(f"\n* Classifying part {chunk_id + 1}/{nchunks}", flush=True)
-        df_chunks[chunk_id][conf["class_name"]] = classifier.predict(
-            chunk.drop(columns=["conf", "i", "j"]))
-        filtered_df = pd.concat(
-            [filtered_df, chunk[chunk[conf["class_name"]] > 0]])
+        df_chunks[chunk_id][conf["class_name"]] = classifier.predict(chunk.drop(columns=["conf", "i", "j"]))
+        filtered_df = pd.concat([filtered_df, chunk[chunk[conf["class_name"]] > 0]])
         print(
             f"done in {time.time() - start} sec (collected up to {len(filtered_df)} class-1) ",
         )
